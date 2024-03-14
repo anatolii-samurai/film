@@ -1,4 +1,4 @@
-import { useContext,useState } from "react";
+import { useContext,useState,useEffect } from "react";
 import { TasksContext,TasksDispatchContext } from "./Context";
 import * as React from 'react';
 import Checkbox from '@mui/material/Checkbox';
@@ -14,24 +14,27 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export function GenreList(){
     const tasks= useContext(TasksContext)
     const dispatch = useContext(TasksDispatchContext)
-    function handleChange(e){debugger
+    
+    function handleChange(e,value){
       dispatch({
-        type:'change',
-        checked:e.target.checked
+        type:'change_genres',
+        genres:value
       })
     }
-    
+    // useEffect(()=>{
+      
+    //   },[tasks.post])
     return(
         <div className='items__genres'>
             
     <Autocomplete
       multiple
-      
+      value={tasks.genres}
       id="checkboxes-tags-demo"
-      onChange={handleChange}
       options={tasks.post}
       disableCloseOnSelect
-      getOptionLabel={(option) => option.name}
+      onChange={handleChange}
+      getOptionLabel={(option) => {return option.name}}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -39,7 +42,6 @@ export function GenreList(){
             checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
             checked={selected}
-    
           />
           {option.name}
         </li>
@@ -48,6 +50,7 @@ export function GenreList(){
       renderInput={(option) => (
         <TextField {...option}  label="Жанры"  placeholder="Favorites" />
       )}
+      
     />
                </div>
     )

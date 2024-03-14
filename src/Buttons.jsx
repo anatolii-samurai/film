@@ -7,7 +7,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 export function CloseFilter(){
     const dispatch = useContext(TasksDispatchContext);
-    function handleResetFilters(e) {debugger
+    function handleResetFilters(e) {
         dispatch({
           type:'reset',
           

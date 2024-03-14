@@ -9,7 +9,8 @@ export function FilterProvider({children}){
     const initialState = {
         selectByCategory:'raiting',
         selectByYear:[2002,2010],
-        post:[]
+        post:[],
+        genres:[],
        }
     const[tasks,dispatch] = useReducer(checkReducer,initialState);
     const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZmJlZDMzMGRmY2FkMmQ3Zjk4NDY4MTBmNDBiZGFkYSIsInN1YiI6IjY1Y2RlZjVhZDdkY2QyMDE3YzFlZGQ3ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RKdDDbycHzyarq7TlYOkqna6C4TjGmJgQZiovGNkfd8'
@@ -57,17 +58,21 @@ export function FilterProvider({children}){
               error:'Something wrong'
             }
         case 'reset' : 
-         { return {post:states.post.map(t=>({...t,checked:false}))}}
+         { return {...states,genres:[]}}
         case 'change' :
           {return {post: states.post.map(t => {
-            if (t.id === action.id) {
+            if (t.name === action.name) {
               return {...t, checked:action.checked};
             }else {
               return t;
             }
-          })}
-            
+          })}   
            }
+           case "change_genres":{
+            console.log("+")
+            return {...states,genres:[...action.genres]}
+
+          }
             default:
               return states
         }
