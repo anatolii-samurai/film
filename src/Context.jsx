@@ -7,8 +7,8 @@ export const TasksDispatchContext = createContext(null);
 
 export function FilterProvider({children}){
     const initialState = {
-        loading:true,
-        error:'',
+        selectByCategory:'raiting',
+        selectByYear:[2002,2010],
         post:[]
        }
     const[tasks,dispatch] = useReducer(checkReducer,initialState);
@@ -47,23 +47,21 @@ export function FilterProvider({children}){
     function checkReducer(states,action){ 
       switch(action.type){
         case 'FETCH_SUCCESS':
-          return{
-            loading:false,
-            post:action.payload,
-            error:''
+          return{...states,post:action.payload.map(g=>{return{...g,checked:false}})
+            
           }
           case 'FETCH_ERROR':
             return{
-              loading:false,
+              loading:true,
               post:[],
               error:'Something wrong'
             }
         case 'reset' : 
-         { return {...states,post: states.post.map(t => ({ ...t, checked:false}))}}
+         { return {post:states.post.map(t=>({...t,checked:false}))}}
         case 'change' :
-          {return {...states,genres: states.genres.map(t => {
-            if (t.name === action.payload.name) {
-              return {...t, checked:action.payload.checked}
+          {return {post: states.post.map(t => {
+            if (t.id === action.id) {
+              return {...t, checked:action.checked};
             }else {
               return t;
             }

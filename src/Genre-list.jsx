@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext,useState } from "react";
 import { TasksContext,TasksDispatchContext } from "./Context";
 import * as React from 'react';
 import Checkbox from '@mui/material/Checkbox';
@@ -6,33 +6,29 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { IconButton } from "@mui/material";
+import ClearIcon from '@mui/icons-material/Clear';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export function GenreList(){
     const tasks= useContext(TasksContext)
     const dispatch = useContext(TasksDispatchContext)
-
-
-
-   
-            
-     
-     
-
-
+    function handleChange(e){debugger
+      dispatch({
+        type:'change',
+        checked:e.target.checked
+      })
+    }
+    
     return(
         <div className='items__genres'>
-              {/* {tasks.loading ? 'loading ' : tasks.post.map(genre=> */}
-                {/* //    ( <label className={genre.name} key={genre.id}><input type="checkbox" id={genre.id}  name="genre" checked={!!genre.checked}  onChange={(e)=>dispatch({ */}
-                {/* //     type:'change',
-                //     id:genre.id,
-                //     checked:e.target.checked
-                //   })}/>{`${genre.name}`}</label>) */}
-
+            
     <Autocomplete
       multiple
+      
       id="checkboxes-tags-demo"
+      onChange={handleChange}
       options={tasks.post}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
@@ -43,24 +39,16 @@ export function GenreList(){
             checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
             checked={selected}
-            onChange={(e)=>dispatch({ 
-            type:'change',
-            id:option.name,
-            checked:e.target.checked
-        })}
+    
           />
           {option.name}
         </li>
       )}
       style={{ width: 296,height:24 }}
-      renderInput={(params) => (
-        <TextField {...params} label="Жанры"  placeholder="Favorites" />
+      renderInput={(option) => (
+        <TextField {...option}  label="Жанры"  placeholder="Favorites" />
       )}
     />
-
-
-                  {/* )}
-                  {tasks.error ? tasks.error : null} */}
                </div>
     )
 }
