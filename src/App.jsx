@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button,Icon,SvgIcon } from '@mui/material';
-import { Form } from './Form';
+import { Icon,SvgIcon } from '@mui/material';
+
 import { Select } from './Select';
 import { FilterProvider } from './Context';
 import { GenreList } from './Genre-list';
@@ -33,9 +33,9 @@ function App() {
               option={<option value={'pop'}>Popularity</option>}
               />
               <Select title={'Год релиза:'} id={'years__filter'} option={<option value={'2022'}>2022</option>}/>
-              <Form>
+            
                <GenreList/>
-                </Form>
+              
               <div className="pagination">
                 
               </div>

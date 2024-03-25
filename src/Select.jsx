@@ -1,6 +1,4 @@
 
-
-
 export const Select = ({title,id,option}) =>{
     return(
         <label className='sort__filter'>

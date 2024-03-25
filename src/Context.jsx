@@ -1,36 +1,24 @@
-import { createContext,useReducer,useEffect } from "react";
-import axios from 'axios'
-export const userKeyContext = createContext('eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZmJlZDMzMGRmY2FkMmQ3Zjk4NDY4MTBmNDBiZGFkYSIsInN1YiI6IjY1Y2RlZjVhZDdkY2QyMDE3YzFlZGQ3ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RKdDDbycHzyarq7TlYOkqna6C4TjGmJgQZiovGNkfd8')
+import { createContext,useReducer } from "react";
+
+
 
 export const TasksContext = createContext(null);
 export const TasksDispatchContext = createContext(null);
 
 export function FilterProvider({children}){
+
     const initialState = {
         selectByCategory:'raiting',
         selectByYear:[2002,2010],
-        post:[],
         genres:[],
        }
     const[tasks,dispatch] = useReducer(checkReducer,initialState);
-    const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZmJlZDMzMGRmY2FkMmQ3Zjk4NDY4MTBmNDBiZGFkYSIsInN1YiI6IjY1Y2RlZjVhZDdkY2QyMDE3YzFlZGQ3ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RKdDDbycHzyarq7TlYOkqna6C4TjGmJgQZiovGNkfd8'
-    const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${apiKey}`
-        }
-      };
-    useEffect(()=>{
-      axios
-      .get('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
-      .then(response =>{
-        dispatch({type:"FETCH_SUCCESS",payload:response.data.genres})
-      })
-      .catch(error => {
-        dispatch({type:'FETCH_ERROR'})
-      } );
-      },[])
+    
+    
+ 
+    // useEffect(()=>{
+    //   getGenres()
+    //   },[])
 
       
        return(
@@ -47,29 +35,26 @@ export function FilterProvider({children}){
 
     function checkReducer(states,action){ 
       switch(action.type){
-        case 'FETCH_SUCCESS':
-          return{...states,post:action.payload.map(g=>{return{...g,checked:false}})
-            
+        case 'set_active_genres': {
+          console.log(action.payload);
+          return {
+            ...states, genres: action.payload
           }
-          case 'FETCH_ERROR':
-            return{
-              loading:true,
-              post:[],
-              error:'Something wrong'
-            }
+        }
         case 'reset' : 
-         { return {...states,genres:[]}}
+         { return {...states,genres: []}}
         case 'change' :
-          {return {post: states.post.map(t => {
-            if (t.name === action.name) {
-              return {...t, checked:action.checked};
+          {console.log(states.genres);return {...states,genres: states.genres.map(t => {
+            if (t.name === action.payload.name) {
+              return {...t, checked:action.payload.checked};
             }else {
               return t;
             }
           })}   
            }
-           case "change_genres":{
-            console.log("+")
+           case "change_genres":
+            {
+            console.log(states.genres);
             return {...states,genres:[...action.genres]}
 
           }

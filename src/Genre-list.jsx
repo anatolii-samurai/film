@@ -6,24 +6,37 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { IconButton } from "@mui/material";
-import ClearIcon from '@mui/icons-material/Clear';
+import { getGenresMovies } from "./api";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export function GenreList(){
     const tasks= useContext(TasksContext)
     const dispatch = useContext(TasksDispatchContext)
+    const [genres, setGenres] = useState([])
     
-    function handleChange(e,value){
-      dispatch({
-        type:'change_genres',
-        genres:value
-      })
-    }
-    // useEffect(()=>{
-      
-    //   },[tasks.post])
+    
+    useEffect(()=>{
+      async function fetchData() {
+        try {
+          const data = await getGenresMovies();
+          if (data) {
+            const genres = data.genres
+            setGenres(genres)
+          }
+  
+        } catch (e) {
+          console.error(e)
+        }
+      }
+  
+      fetchData();
+    },[])
+
+
+
+
+   
     return(
         <div className='items__genres'>
             
@@ -31,12 +44,16 @@ export function GenreList(){
       multiple
       value={tasks.genres}
       id="checkboxes-tags-demo"
-      options={tasks.post}
+      options={genres}
       disableCloseOnSelect
-      onChange={handleChange}
+      onChange={(event, newValue) => {
+        dispatch(
+            {type: 'set_active_genres', payload: newValue}
+        )
+      }}
       getOptionLabel={(option) => {return option.name}}
       renderOption={(props, option, { selected }) => (
-        <li {...props}>
+        <li key={option.name} {...props}>
           <Checkbox
             icon={icon}
             checkedIcon={checkedIcon}
@@ -52,6 +69,6 @@ export function GenreList(){
       )}
       
     />
-               </div>
+  </div>
     )
 }
