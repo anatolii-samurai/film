@@ -4,13 +4,17 @@ import { createContext,useReducer } from "react";
 
 export const TasksContext = createContext(null);
 export const TasksDispatchContext = createContext(null);
-
+export const SORT_OPINIONS = {
+  POPULARITY: 'byPopularity',
+  RATING: 'byRating'
+}
 export function FilterProvider({children}){
-
+  
     const initialState = {
-        selectByCategory:'raiting',
+        selectByCategory:SORT_OPINIONS.POPULARITY,
         selectByYear:[2002,2010],
         genres:[],
+        currentPage:1,
        }
     const[tasks,dispatch] = useReducer(checkReducer,initialState);
     
@@ -41,8 +45,27 @@ export function FilterProvider({children}){
             ...states, genres: action.payload
           }
         }
+        case "set_sort_popularity":{
+          return{
+            ...states,selectByCategory: action.payload
+          }
+        }
+        case 'set_active_years': {
+          return {
+            ...states, selectByYear: action.payload
+          }
+        }
+        case 'set_page': {
+          return {
+            ...states, currentPage: action.payload
+          }
+        }
         case 'reset' : 
-         { return {...states,genres: []}}
+         { return {...states,
+          selectByCategory:SORT_OPINIONS.POPULARITY,
+          selectByYear:[2002,2010],
+          genres:[],
+          currentPage:1,}}
         case 'change' :
           {console.log(states.genres);return {...states,genres: states.genres.map(t => {
             if (t.name === action.payload.name) {

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import {TasksDispatchContext } from './Context';
+import {TasksDispatchContext } from '../components/Context';
 import { IconButton } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 
